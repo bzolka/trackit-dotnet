@@ -1,3 +1,23 @@
 {
-  "enabledMcpjsonServers": ["trackit"]
+  "enabledMcpjsonServers": ["trackit"],
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          { "type": "command",
+            "command": ".claude/hooks/protect-files.sh" }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          { "type": "command",
+            "command": "scripts/format.sh" }
+        ]
+      }
+    ]
+  }
 }
