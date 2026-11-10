@@ -1,3 +1,4 @@
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using TrackIt.Api;
 using TrackIt.Api.Data;
@@ -8,6 +9,7 @@ DotEnv.Load();
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddProblemDetails();
+builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 builder.Services.AddDbContext<TrackItDb>((services, options) =>
 {
     // Read the setting when the context is created, not at startup,
