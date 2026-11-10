@@ -1,3 +1,4 @@
+using FluentValidation;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using TrackIt.Api.Data;
@@ -14,14 +15,20 @@ public static class IssueEndpoints
     {
         var issues = app.MapGroup("/issues");
         issues.MapGet("/", ListIssues);
-        issues.MapGet("/{id:int}", GetIssue);
+        // Route ids are validated by the route constraint: /issues/abc and /issues/0 never match.
+        issues.MapGet("/{id:int:min(1)}", GetIssue);
         issues.MapPost("/", CreateIssue);
-        issues.MapPost("/{id:int}/close", CloseIssue);
+        issues.MapPost("/{id:int:min(1)}/close", CloseIssue);
     }
 
     // GET /issues?status=open&q=login&limit=20
-    static async Task<Ok<List<Issue>>> ListIssues([AsParameters] ListIssuesQuery query, TrackItDb db)
+    static async Task<Results<Ok<List<Issue>>, ValidationProblem>> ListIssues(
+        [AsParameters] ListIssuesQuery query, IValidator<ListIssuesQuery> validator, TrackItDb db)
     {
+        var validation = await validator.ValidateAsync(query);
+        if (!validation.IsValid)
+            return TypedResults.ValidationProblem(validation.ToDictionary());
+
         var issues = db.Issues.AsQueryable();
         if (query.Status is not null)
             issues = issues.Where(i => i.Status == query.Status);
@@ -40,8 +47,13 @@ public static class IssueEndpoints
     }
 
     // POST /issues
-    static async Task<Created<Issue>> CreateIssue(CreateIssueRequest request, TrackItDb db)
+    static async Task<Results<Created<Issue>, ValidationProblem>> CreateIssue(
+        CreateIssueRequest request, IValidator<CreateIssueRequest> validator, TrackItDb db)
     {
+        var validation = await validator.ValidateAsync(request);
+        if (!validation.IsValid)
+            return TypedResults.ValidationProblem(validation.ToDictionary());
+
         var issue = new Issue
         {
             Title = request.Title,
