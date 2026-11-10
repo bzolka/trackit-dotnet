@@ -1,0 +1,5 @@
+# My notes for TrackIt (copy to CLAUDE.local.md; that file is git-ignored)
+
+- I run the API on port 5000; if it is already running, do not start a second one.
+- I am working on #41 (CSV export is slow) this week.
+- Answer briefly; I know the codebase.
