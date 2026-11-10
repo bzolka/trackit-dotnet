@@ -31,7 +31,7 @@ public static class DotEnv
     public static string ResolvePath(string path) =>
         Path.IsPathRooted(path) ? path : Path.GetFullPath(Path.Combine(RepoRoot, path));
 
-    // Walk up from the build output (bin/Debug/net10.0) to the folder with TrackIt.slnx.
+    // Walk up from the build output (somewhere under bin/) to the folder with TrackIt.slnx.
     // This works no matter which directory the program is started from.
     static string FindRepoRoot()
     {

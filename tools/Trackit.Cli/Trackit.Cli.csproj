@@ -8,6 +8,10 @@
     <RootNamespace>Trackit.Cli</RootNamespace>
     <!-- The command is called trackit in its help output and in the wrapper scripts. -->
     <AssemblyName>trackit</AssemblyName>
+    <!-- A fixed output folder (tools/Trackit.Cli/bin/), so that the wrapper scripts keep working
+         after a framework upgrade or a Release build. -->
+    <OutputPath>bin/</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
 
   <ItemGroup>
