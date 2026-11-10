@@ -1,0 +1,8 @@
+{
+  "name": "trackit-toolkit",
+  "version": "1.0.0",
+  "description": "The TrackIt agent setup in one package: release-notes and api-conventions skills, the trackit MCP server, the format and protect-files hooks, and the code-reviewer subagent.",
+  "author": { "name": "Zoltán Benedek" },
+  "repository": "https://github.com/bzolka/trackit-dotnet",
+  "keywords": ["trackit", "teaching", "mcp", "skills", "hooks"]
+}
