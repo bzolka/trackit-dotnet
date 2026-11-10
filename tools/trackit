@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+exec dotnet "$(dirname "$0")/Trackit.Cli/bin/Debug/net10.0/trackit.dll" "$@"
