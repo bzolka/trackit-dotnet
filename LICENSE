@@ -1,0 +1,24 @@
+TrackIt — teaching repository
+Copyright (c) 2026 Zoltán Benedek. All rights reserved.
+
+This teaching material is a work of authorship created by a lecturer of
+the Budapest University of Technology and Economics. Any use without
+express permission constitutes copyright infringement.
+
+Students enrolled in the courses "AI Assisted Software Development" and
+"Szoftverfejlesztés MI támogatással" at the Budapest University of
+Technology and Economics may clone, run, modify and use this repository
+for their own study, coursework and exam preparation, during and after
+the course.
+
+Any other use requires prior written permission from the author. This
+includes reproducing, adapting or redistributing this repository, or parts
+of it, as teaching material for another course, training or publication.
+Contact: benedek.zoltan@aut.bme.hu
+
+Third-party packages used by this project keep their own licenses.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND.
+
+A Hungarian version of this notice is in LICENSE.hu. The two versions are
+equivalent; in case of doubt, the English version prevails.
