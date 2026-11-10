@@ -12,7 +12,7 @@ let a coding agent work with it (a CLI and an MCP server in two languages).
 | `tools/Trackit.Cli/` | `trackit` command-line client; run it with `tools/trackit` | the API over HTTP |
 | `tools/Trackit.Mcp/` | MCP server in C# (`ModelContextProtocol`), stdio | the SQLite file, directly |
 | `tools/trackit-mcp-py/` | the same MCP server in Python (`mcp`), stdio | the SQLite file, directly |
-| `scripts/` | helper scripts: `changes.sh` (merged PRs since a tag), `format.sh` (the format hook) | git, gh, dotnet |
+| `scripts/` | helper scripts: `format.sh` (the format hook), `sync-plugin.sh` (refreshes the plugin's copies) | dotnet, git |
 | `.claude/` | the agent configuration: settings and hooks, skills, the reviewer subagent, rules | |
 
 Inside `src/Api/`:
@@ -77,3 +77,33 @@ src/Api/CLAUDE.md         API-layer knowledge, loaded when working in src/Api/
 .claude/rules/db.md       database conventions, loaded with migrations and SQL files
 .claude/plugins/          trackit-toolkit: the same pieces packaged as a plugin
 ```
+
+## Design decisions
+
+- **The MCP servers read SQLite directly**, not through the API. They work without the API running
+  (once it has created the file), and they show a different road than the CLI, which goes through
+  HTTP. The price: the schema and the create rules exist three times (EF Core and the validators, and
+  the SQL in each server), which is why a schema change must be mirrored by hand. A production MCP
+  server in front of a real API would usually call the API instead.
+- **Only `trackit` is approved** (`enabledMcpjsonServers` in `.claude/settings.json`), so the same tools
+  never show up twice. A committed `disabledMcpjsonServers` was not used: a server disabled that way
+  cannot be enabled from `/mcp`.
+- **Hook commands start from `"$CLAUDE_PROJECT_DIR"`.** Hooks run in the session's current directory;
+  with relative paths they failed after the agent ran `cd`, and the `.env` protection then let edits
+  through (a hook that fails to start does not block). See pull request #7.
+- **`.env` is optional.** Every program falls back to the defaults in `.env.example`, so a clean clone
+  needs no setup. The protect-files hook blocks every path containing `.env`, including `.env.example`.
+- **The plugin holds copies** of the skills, the subagent and the hook scripts. `scripts/sync-plugin.sh`
+  refreshes them, and CI fails when they are stale.
+- **`nuget.config`** clears the package sources and uses only nuget.org, so a clean clone does not depend
+  on a machine's private feeds.
+- **`format.sh` runs `dotnet format` from the project folder with a relative `--include` path:**
+  `dotnet format --include` silently ignores absolute paths and paths starting with `../`.
+- **Statuses are matched exactly.** The MCP tools and the CLI filter on the exact status, so an issue that
+  is `in progress` (#43) is not "open"; it is found with `state="all"`. This keeps the API, the CLI and
+  both servers consistent.
+- **"Every endpoint needs a validator"** (CLAUDE.md) means every endpoint that takes a body or query
+  parameters; route ids are validated by the route constraint (`{id:int:min(1)}`).
+- **The Python server's result is wrapped:** `mcp` adds structured output to a tool that returns `str`, so
+  Claude Code shows `{"result": "#42 ..."}` where the C# server returns plain text. The text is the same.
+  `@mcp.tool(structured_output=False)` would remove the wrapper, but the tool stays as on the slides.
