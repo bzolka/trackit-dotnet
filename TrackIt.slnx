@@ -3,4 +3,7 @@
     <Project Path="src/Api/Api.csproj" />
     <Project Path="src/Tests/Tests.csproj" />
   </Folder>
+  <Folder Name="/tools/">
+    <Project Path="tools/Trackit.Mcp/Trackit.Mcp.csproj" />
+  </Folder>
 </Solution>

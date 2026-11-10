@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "trackit": {
+      "type": "stdio",
+      "command": "dotnet",
+      "args": ["run", "--project", "tools/Trackit.Mcp"]
+    },
+    "trackit-py": {
+      "type": "stdio",
+      "command": "python",
+      "args": ["tools/trackit-mcp-py/trackit_server.py"]
+    }
+  }
+}
