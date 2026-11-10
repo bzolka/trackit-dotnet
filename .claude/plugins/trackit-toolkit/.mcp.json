@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "trackit": {
+      "type": "stdio",
+      "command": "dotnet",
+      "args": ["run", "--project", "${CLAUDE_PROJECT_DIR}/tools/Trackit.Mcp"]
+    }
+  }
+}

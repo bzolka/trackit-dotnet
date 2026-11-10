@@ -1,0 +1,12 @@
+{
+  "name": "trackit",
+  "description": "Plugins for the TrackIt teaching repository",
+  "owner": { "name": "Zoltán Benedek" },
+  "plugins": [
+    {
+      "name": "trackit-toolkit",
+      "source": "./.claude/plugins/trackit-toolkit",
+      "description": "TrackIt skills, MCP server, hooks and the code-reviewer subagent"
+    }
+  ]
+}
